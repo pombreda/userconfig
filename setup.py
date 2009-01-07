@@ -40,7 +40,7 @@ setup(
       description = 'Managing *easily* user configuration files (based on ConfigParser)',
       author = "Pierre Raybaut",
       author_email = 'contact@pythonxy.com',
-      url = 'http://code.google.com/c/config/',
+      url = 'http://code.google.com/p/userconfig/',
       license = 'GPLv3',
       keywords = 'configuration file parser',
       platforms = ['any'],

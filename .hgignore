@@ -5,7 +5,7 @@
 \.orig$
 ^build/
 ^dist/
-^PyQtShell.egg-info/
+^userconfig.egg-info/
 \pypi.txt
 \.bat$
 \makepyqt.pyw
