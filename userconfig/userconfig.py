@@ -28,11 +28,11 @@ This software is licensed under the terms of the GNU General Public
 License version 3 as published by the Free Software Foundation.
 """
 
+__version__ = '1.0.1'
+
 import os
 import os.path as osp
 from ConfigParser import ConfigParser, MissingSectionHeaderError
-
-__version__ = '1.0.1'
 
         
 class NoDefault:

@@ -21,7 +21,12 @@
 userconfig
 ==========
 
-Module handling configuration files based on ConfigParser
+Package handling configuration files based on ConfigParser
+
+Modules:
+    - userconfig: main module
+    - test: userconfig unit tests
+    - example: userconfig usage example
 
 Copyright © 2009 Pierre Raybaut
 This software is licensed under the terms of the GNU General Public
