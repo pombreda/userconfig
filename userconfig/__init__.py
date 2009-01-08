@@ -28,30 +28,4 @@ This software is licensed under the terms of the GNU General Public
 License version 3 as published by the Free Software Foundation.
 """
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-import userconfig
-
-setup(
-      name = 'userconfig',
-      version = userconfig.__version__,
-      description = 'Managing *easily* user configuration files (based on ConfigParser)',
-      author = "Pierre Raybaut",
-      author_email = 'contact@pythonxy.com',
-      url = 'http://code.google.com/p/userconfig/',
-      license = 'GPLv3',
-      keywords = 'configuration file parser',
-      platforms = ['any'],
-      packages = ['userconfig'],
-      classifiers = ['Development Status :: 5 - Production/Stable',
-        'License :: OSI Approved :: GNU General Public License (GPL)',
-        'Operating System :: MacOS',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: OS Independent',
-        'Operating System :: POSIX',
-        'Operating System :: Unix',
-        'Programming Language :: Python :: 2.5',
-        ],
-    )
+from userconfig import UserConfig, __version__
