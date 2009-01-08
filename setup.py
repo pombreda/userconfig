@@ -28,23 +28,28 @@ This software is licensed under the terms of the GNU General Public
 License version 3 as published by the Free Software Foundation.
 """
 
+import os.path as osp
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
-import userconfig
+
+import userconfig as module
+name = osp.split(osp.dirname(module.__file__))[-1]
+version = module.__version__
 
 setup(
-      name = 'userconfig',
-      version = userconfig.__version__,
+      name = name,
+      version = version,
       description = 'Managing *easily* user configuration files (based on ConfigParser)',
+      download_url = 'http://%s.googlecode.com/files/%s-%s-py2.5.egg' % (name, name, version),
       author = "Pierre Raybaut",
       author_email = 'contact@pythonxy.com',
-      url = 'http://code.google.com/p/userconfig/',
+      url = 'http://code.google.com/p/%s/' % name,
       license = 'GPLv3',
       keywords = 'configuration file parser',
       platforms = ['any'],
-      packages = ['userconfig'],
+      packages = [name],
       classifiers = ['Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: MacOS',
