@@ -28,7 +28,7 @@ This software is licensed under the terms of the GNU General Public
 License version 3 as published by the Free Software Foundation.
 """
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 import os
 import os.path as osp
@@ -178,5 +178,14 @@ class UserConfig(ConfigParser):
         section=None: attribute a default section name
         """
         section = self.__check_section_option(section, option)
+        default_value = self.get_default(section, option)
+        if isinstance(default_value, bool):
+            value = bool(value)
+        elif isinstance(default_value, float):
+            value = float(value)
+        elif isinstance(default_value, int):
+            value = int(value)
+        elif not isinstance(default_value, (str, unicode)):
+            value = repr(value)
         self.__set(section, option, value, verbose)
         self.__save()

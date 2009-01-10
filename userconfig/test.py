@@ -9,6 +9,8 @@ import unittest, os
 from userconfig import UserConfig
 
 OPTIONS1 = {
+            'category1/list' : [5, "kk"],
+            'category1/tuple' : (None, "foo"),
             'category1/float' : 12.3,
             'category1/bool' : True,
             'category2/int' : 50,
@@ -80,6 +82,24 @@ class TestOptions1(unittest.TestCase):
     def tearDown(self):
         self.conf.cleanup()
         
+    def test_get_list(self):
+        o_list = self.conf.get(None, 'category1/list')
+        self.assertEquals(o_list, [5, "kk"])
+
+    def test_set_list(self):
+        self.conf.set(None, 'category1/list', [14.5, "jj"])
+        o_list = self.conf.get(None, 'category1/list')
+        self.assertEquals(o_list, [14.5, "jj"])
+
+    def test_get_tuple(self):
+        o_tuple = self.conf.get(None, 'category1/tuple')
+        self.assertEquals(o_tuple, (None, "foo"))
+
+    def test_set_tuple(self):
+        self.conf.set(None, 'category1/tuple', (False, 1238, 3.5))
+        o_tuple = self.conf.get(None, 'category1/tuple')
+        self.assertEquals(o_tuple, (False, 1238, 3.5))
+        
     def test_get_float(self):
         o_float = self.conf.get(None, 'category1/float')
         self.assertEquals(o_float, 12.3)
@@ -94,7 +114,7 @@ class TestOptions1(unittest.TestCase):
         self.assertEquals(o_int, 50)
 
     def test_set_int(self):
-        self.conf.set(None, 'category2/int', 10)
+        self.conf.set(None, 'category2/int', 10.0)
         o_int = self.conf.get(None, 'category2/int')
         self.assertEquals(o_int, 10)
 
