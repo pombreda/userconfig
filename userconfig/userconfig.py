@@ -64,6 +64,7 @@ class UserConfig(ConfigParser):
             self.__load()
             if version != self.get_version(version):
                 # Version has changed -> overwriting .ini file
+                self.reset_to_defaults(save=False)
                 self.__remove_deprecated_options()
                 # Set new version number
                 self.set_version(version, save=False)
