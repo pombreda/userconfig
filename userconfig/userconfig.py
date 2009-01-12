@@ -49,9 +49,9 @@ class UserConfig(ConfigParser):
     differ from the overriden methods
     """
     
-    default_section_name = 'Default'
+    default_section_name = 'default'
     
-    def __init__(self, name, defaults = None, load = True):
+    def __init__(self, name, defaults=None, load=True, version=None):
         ConfigParser.__init__(self)
         self.name = name
         if isinstance(defaults, dict):
@@ -59,15 +59,27 @@ class UserConfig(ConfigParser):
         self.defaults = defaults
         if defaults is not None:
             self.reset_to_defaults(save=False)
-        # If config file already exists, it overrides Default options:
         if load:
+            # If config file already exists, it overrides Default options:
             self.__load()
-            if defaults is None:
-                self.set_as_defaults()
-            else:
+            if version != self.get_version(version):
+                # Version has changed -> overwriting .ini file
                 self.__remove_deprecated_options()
+                # Set new version number
+                self.set_version(version, save=False)
+            if defaults is None:
+                # If no defaults are defined, set .ini file settings as default
+                self.set_as_defaults()
         # In any case, the resulting config is saved in config file:
         self.__save()
+        
+    def get_version(self, version='0.0.0'):
+        """Return configuration (not application!) version"""
+        return self.get(self.default_section_name, 'version', version)
+        
+    def set_version(self, version='0.0.0', save=True):
+        """Set configuration (not application!) version"""
+        self.set(self.default_section_name, 'version', version, save=save)
 
     def __load(self):
         """
@@ -166,7 +178,10 @@ class UserConfig(ConfigParser):
         section = self.__check_section_option(section, option)
 
         if not self.has_section(section):
-            raise RuntimeError, "Unknown section"
+            if default is NoDefault:
+                raise RuntimeError, "Unknown section"
+            else:
+                self.add_section(section)
         
         if not self.has_option(section, option):
             if default is NoDefault:
@@ -213,7 +228,7 @@ class UserConfig(ConfigParser):
             if sec == section:
                 options[ option ] = default_value
 
-    def set(self, section, option, value, verbose=False):
+    def set(self, section, option, value, verbose=False, save=True):
         """
         Set an option
         section=None: attribute a default section name
@@ -232,4 +247,5 @@ class UserConfig(ConfigParser):
         elif not isinstance(default_value, (str, unicode)):
             value = repr(value)
         self.__set(section, option, value, verbose)
-        self.__save()
+        if save:
+            self.__save()
