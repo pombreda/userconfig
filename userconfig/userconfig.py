@@ -145,14 +145,16 @@ class UserConfig(ConfigParser):
 
     def get_default(self, section, option):
         """
-        Get Default value for a given (option, section)
+        Get Default value for a given (section, option)
         -> useful for type checking in 'get' method
         """
         section = self.__check_section_option(section, option)
         for sec, options in self.defaults:
             if sec == section:
-                return options[ option ]
-        return NoDefault
+                if option in options:
+                    return options[ option ]
+        else:
+            return NoDefault
                 
     def get(self, section, option, default=NoDefault):
         """
@@ -170,6 +172,7 @@ class UserConfig(ConfigParser):
             if default is NoDefault:
                 raise RuntimeError, "Unknown option"
             else:
+                self.set(section, option, default)
                 return default
             
         value = ConfigParser.get(self, section, option)
@@ -200,6 +203,16 @@ class UserConfig(ConfigParser):
             print '%s[ %s ] = %s' % (section, option, value)
         ConfigParser.set(self, section, option, value)
 
+    def set_default(self, section, option, default_value):
+        """
+        Set Default value for a given (section, option)
+        -> called when a new (section, option) is set and no default exists
+        """
+        section = self.__check_section_option(section, option)
+        for sec, options in self.defaults:
+            if sec == section:
+                options[ option ] = default_value
+
     def set(self, section, option, value, verbose=False):
         """
         Set an option
@@ -207,6 +220,9 @@ class UserConfig(ConfigParser):
         """
         section = self.__check_section_option(section, option)
         default_value = self.get_default(section, option)
+        if default_value is NoDefault:
+            default_value = value
+            self.set_default(section, option, default_value)
         if isinstance(default_value, bool):
             value = bool(value)
         elif isinstance(default_value, float):
