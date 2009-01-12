@@ -25,6 +25,13 @@ OPTIONS = [('Font',
 # (if the .ini file already exists, its contents will override
 # those defined above)
 CONFIG = UserConfig('app_name', OPTIONS)
+# or, you may (optional) add a version number to your configuration:
+# (note that this will be the version number of the configuration file,
+#  not of your application! -- at least if you want to keep user old settings)
+# (when the version number change, the deprecated options are removed --
+#  here 'deprecated' means: not present in defaults values - here 'OPTIONS')
+CONFIG = UserConfig('app_name', OPTIONS, version='1.0.2')
+
 
 # How to get options from .ini file:
 print 'Custom font:', 'yes' if CONFIG.get('Font', 'custom') else 'no'
