@@ -28,7 +28,7 @@ This software is licensed under the terms of the GNU General Public
 License version 3 as published by the Free Software Foundation.
 """
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 import os
 import os.path as osp
@@ -54,13 +54,18 @@ class UserConfig(ConfigParser):
     def __init__(self, name, defaults = None, load = True):
         ConfigParser.__init__(self)
         self.name = name
-        if not isinstance(defaults, list):
+        if isinstance(defaults, dict):
             defaults = [ (self.default_section_name, defaults) ]
         self.defaults = defaults
-        self.reset_to_defaults(save=False)
+        if defaults is not None:
+            self.reset_to_defaults(save=False)
         # If config file already exists, it overrides Default options:
         if load:
             self.__load()
+            if defaults is None:
+                self.set_as_defaults()
+            else:
+                self.__remove_deprecated_options()
         # In any case, the resulting config is saved in config file:
         self.__save()
 
@@ -72,6 +77,17 @@ class UserConfig(ConfigParser):
             self.read(self.filename())
         except MissingSectionHeaderError:
             print "Warning: File contains no section headers."
+        
+    def __remove_deprecated_options(self):
+        """
+        Remove options which are present in the .ini file but not in defaults
+        """
+        for section in self.sections():
+            for option, _ in self.items(section):
+                if self.get_default(section, option) is NoDefault:
+                    self.remove_option(section, option)
+                    if len(self.items(section)) == 0:
+                        self.remove_section(section)
         
     def __save(self):
         """
@@ -92,6 +108,17 @@ class UserConfig(ConfigParser):
         Remove .ini file associated to config
         """
         os.remove(self.filename())
+
+    def set_as_defaults(self):
+        """
+        Set defaults from the current config
+        """
+        self.defaults = []
+        for section in self.sections():
+            secdict = {}
+            for option, value in self.items(section):
+                secdict[option] = value
+            self.defaults.append( (section, secdict) )
 
     def reset_to_defaults(self, save=True, verbose=False):
         """
@@ -125,6 +152,7 @@ class UserConfig(ConfigParser):
         for sec, options in self.defaults:
             if sec == section:
                 return options[ option ]
+        return NoDefault
                 
     def get(self, section, option, default=NoDefault):
         """
