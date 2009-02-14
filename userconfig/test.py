@@ -32,8 +32,8 @@ OPTIONS2 = [ ('category1',
             ]
 
 
-def conf_modified_by_user():
-    conf = UserConfig('testconfig2', OPTIONS2)
+def conf_modified_by_user(version=None):
+    conf = UserConfig('testconfig2', OPTIONS2, version=version)
     conf_file = file(conf.filename())
     lines = conf_file.readlines()
     conf_file.close()
@@ -41,7 +41,7 @@ def conf_modified_by_user():
     conf_file = file(conf.filename(),'w')
     conf_file.writelines(lines)
     conf_file.close()
-    return UserConfig('testconfig2', OPTIONS2)
+    return UserConfig('testconfig2', OPTIONS2, version=version)
 
 class TestFile(unittest.TestCase):
     def test_exist1(self):
@@ -72,6 +72,36 @@ class TestFile(unittest.TestCase):
         conf = conf_modified_by_user()
         o_str_default = conf.get_default('category2', 'str')
         self.assertEquals(o_str_default, 'text text')
+        
+    def test_load(self):
+        conf_modified_by_user()
+        conf = UserConfig('testconfig2', OPTIONS2)
+        o_str = conf.get('category2', 'str')
+        self.assertEquals(o_str, 'other text')
+        
+    def test_load_false(self):
+        conf_modified_by_user()
+        conf = UserConfig('testconfig2', OPTIONS2, load=False)
+        o_str = conf.get('category2', 'str')
+        self.assertEquals(o_str, 'text text')
+        
+    def test_new_config_version(self):
+        conf_modified_by_user()
+        conf = UserConfig('testconfig2', OPTIONS2, version='1.0.1')
+        o_str = conf.get('category2', 'str')
+        self.assertEquals(o_str, 'text text')
+        
+    def test_changed_config_version(self):
+        conf_modified_by_user(version='1.0.0')
+        conf = UserConfig('testconfig2', OPTIONS2, version='1.0.1')
+        o_str = conf.get('category2', 'str')
+        self.assertEquals(o_str, 'text text')
+        
+    def test_same_config_version(self):
+        conf_modified_by_user(version='1.0.1')
+        conf = UserConfig('testconfig2', OPTIONS2, version='1.0.1')
+        o_str = conf.get('category2', 'str')
+        self.assertEquals(o_str, 'other text')
 
 
 class TestOptions1(unittest.TestCase):
