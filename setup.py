@@ -52,7 +52,7 @@ setup(
       author = "Pierre Raybaut",
       author_email = 'contact@pythonxy.com',
       url = 'http://code.google.com/p/%s/' % name,
-      license = 'GPLv3',
+      license = 'GPLv2',
       keywords = keywords,
       platforms = ['any'],
       packages = packages,
