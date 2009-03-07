@@ -25,7 +25,7 @@ Module handling configuration files based on ConfigParser
 
 Copyright © 2009 Pierre Raybaut
 This software is licensed under the terms of the GNU General Public
-License version 3 as published by the Free Software Foundation.
+License version 2 as published by the Free Software Foundation.
 """
 
 import userconfig as module
