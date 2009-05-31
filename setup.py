@@ -58,7 +58,7 @@ setup(
       packages = packages,
       package_data = package_data,
       classifiers = classifiers + [
-        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: OS Independent',
