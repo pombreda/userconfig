@@ -15,7 +15,7 @@ OPTIONS1 = {
             'category1/bool' : True,
             'category2/int' : 50,
             'category2/str' : 'text text',
-            'category3/unicode' : u'ééùùàà',
+            'category3/unicode' : u'ééǿùùàà',
             }
 
 OPTIONS2 = [ ('category1',
@@ -27,7 +27,7 @@ OPTIONS2 = [ ('category1',
                'str' : 'text text',
                }),
              ('category3',
-              {'unicode' : u'ééùùàà',
+              {'unicode' : u'ééǿùùàà',
                }),
             ]
 
@@ -168,12 +168,12 @@ class TestOptions1(unittest.TestCase):
 
     def test_get_unicode(self):
         o_unicode = self.conf.get(None, 'category3/unicode')
-        self.assertEquals(o_unicode, u'ééùùàà')
+        self.assertEquals(o_unicode, u'ééǿùùàà')
 
     def test_set_unicode(self):
-        self.conf.set(None, 'category3/unicode', u'ôôôô')
+        self.conf.set(None, 'category3/unicode', u'ééǿùùàà')
         o_unicode = self.conf.get(None, 'category3/unicode')
-        self.assertEquals(o_unicode, u'ôôôô')
+        self.assertEquals(o_unicode, u'ééǿùùàà')
 
 
 class TestOptions2(unittest.TestCase):
@@ -207,7 +207,7 @@ class TestOptions2(unittest.TestCase):
 
     def test_get_unicode(self):
         o_unicode = self.conf.get('category3', 'unicode')
-        self.assertEquals(o_unicode, u'ééùùàà')
+        self.assertEquals(o_unicode, u'ééǿùùàà')
 
     def test_get_default(self):
         o_default = self.conf.get('category3', 'unknown', default=23)
